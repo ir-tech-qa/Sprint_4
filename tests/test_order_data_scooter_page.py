@@ -1,8 +1,8 @@
 from selenium import webdriver
 
 from Locators.order_data_scooter_page_locators import OrderDataScooterPageLocators
+from Locators.order_data_user_page_locators import OrderDataUserPageLocators
 from Pages.order_data_scooter_page import OrderDataScooterPage
-from Pages.order_data_user_page import OrderDataUserPage
 
 options = webdriver.FirefoxOptions()
 options.add_argument("--width=1920")
@@ -12,34 +12,18 @@ options.add_argument("--height=1020")
 class TestOrderDataScooter:
     driver = None
 
-    @classmethod
-    def setup_class(cls):
-        cls.driver = webdriver.Firefox(options=options)
-
-    def test_clik_order(self):
-        self.driver.get('https://qa-scooter.praktikum-services.ru/')
-        order_user_page = OrderDataUserPage(self.driver)
-        order_scooter_page = OrderDataScooterPage(self.driver)
-        element = self.driver.find_element(*OrderDataScooterPageLocators.SCROLL_LOCATOR)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
-        self.driver.find_element(*OrderDataScooterPageLocators.BUTTON_ORDER_MAIN).click()
-        order_user_page.set_name('Маргарита')
-        order_user_page.set_lastname('Авокадкина')
-        order_user_page.set_adress('Балашиха, Тверская, 10')
-        order_user_page.clik_metro()
-        order_user_page.select_metro()
-        order_user_page.set_number('89995554411')
-        order_user_page.click_next()
-        order_scooter_page.clik_delivery_time()
-        order_scooter_page.select_data_delivery()
-        order_scooter_page.click_rental_time()
-        order_scooter_page.select_rental_time()
-        order_scooter_page.select_color()
-        order_scooter_page.set_comment('Доставьте быстрее')
-        order_scooter_page.clik_order()
-        order_scooter_page.clik_yes_order()
-        assert self.driver.find_element(*OrderDataScooterPageLocators.TEXT_ORDER), "Тест не пройден"
-
-    @classmethod
-    def teardown_class(cls):
-        cls.driver.quit()
+    def test_clik_order(self, driver):
+        order_scooter_page = OrderDataScooterPage(driver)
+        order_scooter_page.scroll_to_element(OrderDataScooterPageLocators.SCROLL_LOCATOR)
+        order_scooter_page.click_to_element(OrderDataScooterPageLocators.BUTTON_ORDER_MAIN)
+        order_scooter_page.set_text_on_field(OrderDataUserPageLocators.NAME_LOCATOR, 'Светлана')
+        order_scooter_page.set_text_on_field(OrderDataUserPageLocators.LASTNAME_LOCATOR, 'Золотова')
+        order_scooter_page.set_text_on_field(OrderDataUserPageLocators.ADRESS_LOCATOR, 'Москва, Красный бульвар, 5')
+        order_scooter_page.click_to_element(OrderDataUserPageLocators.METRO_LOCATOR)
+        order_scooter_page.click_to_element(OrderDataUserPageLocators.METRO_STATION)
+        order_scooter_page.set_text_on_field(OrderDataUserPageLocators.NUMBER_LOCATOR, '89995554433')
+        order_scooter_page.click_to_element(OrderDataUserPageLocators.BUTTON_NEXT)
+        order_scooter_page.set_data_scooter_by_order()
+        order_scooter_page.click_to_element(OrderDataScooterPageLocators.BUTTON_ORDER)
+        order_scooter_page.click_to_element(OrderDataScooterPageLocators.YES_LOCATOR)
+        assert driver.find_element(*OrderDataScooterPageLocators.TEXT_ORDER), "Тест не пройден"
