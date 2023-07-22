@@ -1,11 +1,6 @@
 import pytest
-from selenium import webdriver
 from Locators.main_page_locators import MainPageLocators
 from Pages.main_pages import QuestionsPage
-
-options = webdriver.FirefoxOptions()
-options.add_argument("--width=1920")
-options.add_argument("--height=1020")
 
 
 class TestQuestion:

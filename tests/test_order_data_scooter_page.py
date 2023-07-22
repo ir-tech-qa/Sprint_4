@@ -1,12 +1,6 @@
-from selenium import webdriver
-
 from Locators.order_data_scooter_page_locators import OrderDataScooterPageLocators
 from Locators.order_data_user_page_locators import OrderDataUserPageLocators
 from Pages.order_data_scooter_page import OrderDataScooterPage
-
-options = webdriver.FirefoxOptions()
-options.add_argument("--width=1920")
-options.add_argument("--height=1020")
 
 
 class TestOrderDataScooter:
